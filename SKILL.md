@@ -68,3 +68,25 @@ inkwell display text 20:6E:F1:B5:9E:0C "Hello" --page 1
 | Canvas API (render functions, custom layouts) | `references/canvas.md` |
 | Client API (devices, todos, display) | `references/api.md` |
 | Setup guide (install, fonts, verify) | `references/setup.md` |
+
+## Built-in Dashboards
+
+### Token Dashboard (`token_dashboard.py`)
+
+Queries Hermes `state.db` (`sessions` table) for daily LLM token usage and renders a bar-chart dashboard on page 1.
+
+```bash
+# Push today's stats
+./token_dashboard.py
+
+# Push yesterday's stats
+./token_dashboard.py --yesterday
+
+# Preview without pushing
+./token_dashboard.py --dry-run
+```
+
+- **Data source**: `~/.hermes/state.db` → `sessions` table (`input_tokens`, `output_tokens`, `cache_read_tokens`, `started_at`, `model`)
+- **Cron**: hourly via `cronjob` (job_id: `07ec9810f6b1`), pushes to e-ink page 1
+- **Fonts**: NotoSansCJK (labels) + LiberationMono (numbers), no emoji (1-bit clean)
+- **Pitfall — NULL model**: sessions rows with `model IS NULL` can sneak in despite `COALESCE` on token columns (SQL `GROUP BY` includes NULL as a group). The rendering code guards with `(r["model"] or "(unknown)")` and `(r["input_tok"] or 0)` throughout.
