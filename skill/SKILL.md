@@ -58,16 +58,16 @@ inkwell display text 20:6E:F1:B5:9E:0C "Hello" --page 1
 5. **Emoji**: Use `Symbola_hint.ttf`, not `NotoColorEmoji` (PIL rejects it)
 6. **Hermes venv**: inkwell is installed in `~/.hermes/hermes-agent/venv/`. If module not found:
    ```bash
-   ~/.hermes/hermes-agent/venv/bin/pip3 install -e ~/.hermes/skills/creative/inkwell
+   ~/.hermes/hermes-agent/venv/bin/pip3 install -e ~/Coding/inkwell
    ```
 
 ## References
 
 | Topic | File |
 |-------|------|
-| Canvas API (render functions, custom layouts) | `skill/references/canvas.md` |
-| Client API (devices, todos, display) | `skill/references/api.md` |
-| Setup guide (install, fonts, verify) | `skill/references/setup.md` |
+| Canvas API (render functions, custom layouts) | `references/canvas.md` |
+| Client API (devices, todos, display) | `references/api.md` |
+| Setup guide (install, fonts, verify) | `references/setup.md` |
 | Token Dashboard (daily + weekly) | `scripts/token_dashboard.py` |
 
 ## Built-in Dashboards
@@ -98,6 +98,6 @@ Queries Hermes `state.db` (`sessions` table) for daily LLM token usage and rende
   - Weekly: Mondays 09:00 via `cronjob` (job_id: `5e5221cc36b1`), pushes to e-ink **page 2**
 - **Fonts**: NotoSansCJK (labels) + LiberationMono (numbers), no emoji (1-bit clean)
 - **Push time**: header includes the render/push time in 24-hour `HH:MM` format (e.g. `04/28 20:55`). Keep this compact so it fits the 400px width.
-- **Testing**: `pytest` may not be on PATH; run tests with Hermes venv: `/home/jerry/.hermes/hermes-agent/venv/bin/python -m pytest -q scripts/tests/` from the inkwell project directory.
+- **Testing**: `pytest` may not be on PATH; run tests with Hermes venv: `/home/jerry/.hermes/hermes-agent/venv/bin/python -m pytest -q skill/scripts/tests/` from the inkwell project directory.
 - **Pitfall — NULL model**: sessions rows with `model IS NULL` can sneak in despite `COALESCE` on token columns (SQL `GROUP BY` includes NULL as a group). The rendering code guards with `(r["model"] or "(unknown)")` and `(r["input_tok"] or 0)` throughout.
 - **Pitfall — weekly data gaps**: `aggregate_weekly()` only sums days present in `token_history.json`. If a day is missing (e.g. cron was down), the weekly total is understated. No interpolation is performed.
