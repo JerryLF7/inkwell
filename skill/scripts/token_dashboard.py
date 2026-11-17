@@ -168,6 +168,7 @@ def shorten_model(name: str) -> str:
         "kimi-for-coding": "kimi-code",
         "deepseek-v4-pro": "ds-v4-pro",
         "deepseek-v4-flash": "ds-v4-flash",
+        "deepseek-flash": "ds-flash",
         "gpt-5.4": "gpt-5.4",
         "MiniMax-M2.7": "MiniMax",
     }
